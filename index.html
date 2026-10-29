@@ -95,14 +95,22 @@ section{padding:clamp(88px,12vw,160px) var(--pad)}
 .filters button{font:inherit;font-size:.95rem;font-weight:400;color:var(--mute);background:none;border:1px solid var(--line);padding:9px 20px;border-radius:999px;cursor:pointer;transition:.25s}
 .filters button:hover{color:var(--bone);border-color:var(--mute)}
 .filters button[aria-pressed="true"]{background:var(--bone);color:var(--ink);border-color:var(--bone)}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(28px,3vw,48px) clamp(16px,2vw,28px)}
-.work{display:block}
+.slider{display:flex;gap:clamp(16px,2vw,28px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:var(--pad);
+  margin-inline:calc(var(--pad)*-1);padding:0 var(--pad) 8px;cursor:grab;scrollbar-width:none;overscroll-behavior-x:contain}
+.slider::-webkit-scrollbar{display:none}
+.slider.drag{scroll-snap-type:none;cursor:grabbing;user-select:none}
+.slider.drag .work{pointer-events:none}
+.work{display:block;flex:0 0 clamp(290px,40vw,580px);scroll-snap-align:start;-webkit-user-drag:none}
 .work[hidden]{display:none}
-.work:nth-child(6n+1),.work:nth-child(6n+4){grid-column:span 7}
-.work:nth-child(6n+2),.work:nth-child(6n+3){grid-column:span 5}
-.work:nth-child(6n+5),.work:nth-child(6n){grid-column:span 6}
-.media{aspect-ratio:16/10;border-radius:4px;overflow:hidden;position:relative;border:1px solid var(--line);background:var(--g,var(--gd));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
-.work:nth-child(6n+2) .media,.work:nth-child(6n+3) .media{aspect-ratio:4/3.6}
+.ctrl{display:flex;align-items:center;gap:28px;margin-top:36px}
+.bar{flex:1;height:2px;background:var(--line);position:relative;overflow:hidden;border-radius:2px}
+.bar i{position:absolute;left:0;top:0;bottom:0;width:30%;background:var(--brass);border-radius:2px;transition:transform .15s linear}
+.arrows{display:flex;gap:10px}
+.arrows button{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--bone);cursor:pointer;display:grid;place-items:center;transition:.25s}
+.arrows button:hover:not(:disabled){background:var(--bone);color:var(--ink);border-color:var(--bone)}
+.arrows button:disabled{opacity:.3;cursor:default}
+.arrows svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.media{aspect-ratio:4/3;border-radius:4px;overflow:hidden;position:relative;border:1px solid var(--line);background:var(--g,var(--gd));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 .media::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(4,22,28,.6));opacity:.7;transition:opacity .4s}
 .media span{position:absolute;right:16px;top:14px;font-size:.85rem;background:rgba(4,22,28,.6);padding:5px 14px;border-radius:999px;color:var(--bone)}
 .work:hover .media{transform:scale(.985)}
@@ -136,9 +144,8 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
   .head{gap:16px;margin-bottom:40px}
   .portrait{max-width:420px}
   .areas li{gap:8px;padding:24px 0}
-  .grid{grid-template-columns:1fr}
-  .work:nth-child(n){grid-column:auto}
-  .work:nth-child(n) .media{aspect-ratio:16/10}
+  .work{flex-basis:78vw}
+  .arrows button{width:46px;height:46px}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
@@ -155,7 +162,7 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
     <li><a href="#areas">Áreas</a></li>
     <li><a href="#projetos">Trabalhos</a></li>
   </ul></nav>
-  <a class="cta" href="#https://wa.me/244925666502">Vamos trabalhar juntos</a>
+  <a class="cta" href="#contacto">Vamos trabalhar juntos</a>
 </header>
 
 <main id="topo">
@@ -185,7 +192,7 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
         <dl class="facts">
           <div><dt>Base</dt><dd>Luanda, Angola</dd></div>
           <div><dt>Disponível para</dt><dd>Freelance e colaborações</dd></div>
-          <div><dt>Idiomas</dt><dd>Português, Inglês, Espanhol</dd></div>
+          <div><dt>Idiomas</dt><dd>Português, Inglês</dd></div>
         </dl>
       </div>
     </div>
@@ -204,7 +211,7 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
   </section>
 
   <section id="projetos" style="padding-top:0">
-    <div class="head"><h2>Trabalhos</h2><p>Uma seleção de projetos recentes. Filtra por área.</p></div>
+    <div class="head"><h2>Trabalhos</h2><p>Uma seleção de projetos recentes. Desliza para ver mais e filtra por área.</p></div>
 
     <div class="filters" role="group" aria-label="Filtrar trabalhos">
       <button aria-pressed="true" data-f="todos">Todos</button>
@@ -218,7 +225,7 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
     <!-- PARA CADA PROJETO: troca título, texto e link. Para usar uma imagem tua,
          põe-a na pasta "imagens" e acrescenta ao .media:
          style="--g:url(imagens/o-teu-ficheiro.jpg) center/cover" -->
-    <div class="grid" id="grid">
+    <div class="slider" id="grid" tabindex="0" role="region" aria-label="Trabalhos. Desliza na horizontal.">
       <a class="work" href="#" data-cat="video"><div class="media g1"><span>Vídeo</span></div><div class="info"><div><h3>Nome do projeto</h3><p>Uma frase sobre o que fizeste e o resultado alcançado.</p></div><span class="yr">2026</span></div></a>
       <a class="work" href="#" data-cat="design"><div class="media g2"><span>Design</span></div><div class="info"><div><h3>Nome do projeto</h3><p>Uma frase sobre o que fizeste e o resultado alcançado.</p></div><span class="yr">2026</span></div></a>
       <a class="work" href="#" data-cat="musica"><div class="media g3"><span>Música</span></div><div class="info"><div><h3>Nome da faixa</h3><p>O estilo, a história por trás e onde ouvir.</p></div><span class="yr">2026</span></div></a>
@@ -226,20 +233,27 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
       <a class="work" href="#" data-cat="social"><div class="media g5"><span>Redes sociais</span></div><div class="info"><div><h3>Nome da campanha</h3><p>Uma frase sobre a estratégia e os resultados.</p></div><span class="yr">2025</span></div></a>
       <a class="work" href="#" data-cat="video"><div class="media g6"><span>YouTube</span></div><div class="info"><div><h3>Nome do vídeo</h3><p>Uma frase sobre o conceito e a produção.</p></div><span class="yr">2025</span></div></a>
     </div>
+    <div class="ctrl">
+      <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+      <div class="arrows">
+        <button id="prev" aria-label="Trabalho anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button id="next" aria-label="Próximo trabalho"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
 
     <p class="note">Estes seis trabalhos são modelos. Substitui-os pelos teus melhores projetos e apaga os que não usares.</p>
   </section>
 
   <section id="contacto" class="contact">
     <p class="kicker">Tens uma ideia ou um projeto em mente?</p>
-    <a class="mail" href="mailto:micyambi@icloud.com">micyambi@icloud.com</a>
+    <a class="mail" href="mailto:O_TEU_EMAIL">O_TEU_EMAIL</a>
     <div class="links">
-      <a href="https://instagram.com/michaelyambi" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://youtube.com/@noja_ao" target="_blank" rel="noopener">YouTube</a>
-      <a href="https://tiktok.com/@heisdeuroo" target="_blank" rel="noopener">TikTok</a>
-      <a href="https://wa.me/244925666502" target="_blank" rel="noopener">WhatsApp</a>
-      <a href="https://github.com/michaelyambi" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://linkedin.com/in/my4real" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://instagram.com/O_TEU_USER" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://youtube.com/@O_TEU_CANAL" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://tiktok.com/@O_TEU_USER" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://wa.me/244XXXXXXXXX" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://github.com/O_TEU_USER" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/O_TEU_USER" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </section>
 </main>
@@ -259,12 +273,43 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
   } catch(e){} };
   tick(); setInterval(tick, 30000);
 
+  // Slider horizontal
+  const slider = document.getElementById('grid'), barra = document.getElementById('bar');
+  const ant = document.getElementById('prev'), seg = document.getElementById('next');
+  const passo = () => { const c = slider.querySelector('.work:not([hidden])');
+    return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle(slider).columnGap || 24) : 300; };
+  ant.addEventListener('click', () => slider.scrollBy({left:-passo(), behavior:'smooth'}));
+  seg.addEventListener('click', () => slider.scrollBy({left:passo(), behavior:'smooth'}));
+  function atualizar(){
+    const max = slider.scrollWidth - slider.clientWidth;
+    const f = Math.max(slider.clientWidth / slider.scrollWidth, .12);
+    const p = max > 0 ? slider.scrollLeft / max : 0;
+    barra.style.width = (f*100) + '%';
+    barra.style.transform = 'translateX(' + (p * (1/f - 1) * 100) + '%)';
+    ant.disabled = slider.scrollLeft < 4;
+    seg.disabled = max <= 0 || slider.scrollLeft > max - 4;
+  }
+  slider.addEventListener('scroll', atualizar, {passive:true});
+  window.addEventListener('resize', atualizar); atualizar();
+  slider.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') seg.click(); if (e.key === 'ArrowLeft') ant.click(); });
+
+  // Arrastar com o rato
+  let down = false, mexeu = false, x0 = 0, s0 = 0;
+  slider.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; mexeu = false; x0 = e.clientX; s0 = slider.scrollLeft; });
+  window.addEventListener('pointermove', e => { if (!down) return; const d = e.clientX - x0;
+    if (Math.abs(d) > 5) { mexeu = true; slider.classList.add('drag'); } if (mexeu) slider.scrollLeft = s0 - d; });
+  window.addEventListener('pointerup', () => { down = false; setTimeout(() => slider.classList.remove('drag'), 0); });
+  slider.addEventListener('click', e => { if (mexeu) { e.preventDefault(); mexeu = false; } }, true);
+  slider.addEventListener('dragstart', e => e.preventDefault());
+
   // Filtro de trabalhos
   const botoes = document.querySelectorAll('.filters button');
   const itens = document.querySelectorAll('#grid .work');
   botoes.forEach(b => b.addEventListener('click', () => {
     botoes.forEach(x => x.setAttribute('aria-pressed', x === b));
     itens.forEach(i => { i.hidden = b.dataset.f !== 'todos' && i.dataset.cat !== b.dataset.f; });
+    slider.scrollTo({left:0}); atualizar();
   }));
 </script>
 </body>
