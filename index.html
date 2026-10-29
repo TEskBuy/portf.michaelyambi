@@ -116,6 +116,19 @@ section{padding:clamp(88px,12vw,160px) var(--pad)}
 .work h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,2.4vw,2.2rem);line-height:1.05}
 .work p{color:var(--mute);font-size:.98rem;max-width:44ch;margin-top:6px}
 .work .yr{color:var(--mute);font-size:.95rem;white-space:nowrap}
+.media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.media::before{z-index:1}
+.media span{z-index:2}
+.play{position:absolute;z-index:2;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:rgba(5,24,30,.55);border:1px solid rgba(242,238,230,.5);backdrop-filter:blur(6px);display:grid;place-items:center;transition:.3s}
+.play svg{width:26px;height:26px;fill:var(--bone);margin-left:4px;transition:.3s}
+.work[data-yt]:hover .play{background:var(--brass);border-color:var(--brass);transform:scale(1.08)}
+.work[data-yt]:hover .play svg{fill:var(--ink)}
+dialog.player{border:0;background:transparent;color:var(--bone);padding:0;width:min(1100px,92vw);max-width:none;margin:auto;overflow:visible}
+dialog.player::backdrop{background:rgba(3,16,21,.88);backdrop-filter:blur(8px)}
+.player .frame{aspect-ratio:16/9;background:#000;border-radius:6px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 120px rgba(0,0,0,.6)}
+.player iframe{width:100%;height:100%;border:0;display:block}
+.player .fechar{position:absolute;right:0;top:-54px;background:none;border:1px solid var(--line);color:var(--bone);border-radius:999px;padding:8px 20px;font:inherit;cursor:pointer;transition:.25s}
+.player .fechar:hover{background:var(--bone);color:var(--ink)}
 .g1{--gd:linear-gradient(135deg,#1B7A8C,#0B3340 55%,#D9803F)}
 .g2{--gd:linear-gradient(150deg,#0F4A5A,#072630 55%,#C4562F)}
 .g3{--gd:linear-gradient(120deg,#176D80,#0A2E3A 60%,#E8A064)}
@@ -223,7 +236,7 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
          põe-a na pasta "imagens" e acrescenta ao .media:
          style="--g:url(imagens/o-teu-ficheiro.jpg) center/cover" -->
     <div class="slider" id="grid" tabindex="0" role="region" aria-label="Trabalhos. Desliza na horizontal.">
-      <a class="work" href="#" data-cat="video"><div class="media g1"><span>Vídeo</span></div><div class="info"><div><h3>Nome do projeto</h3><p>Uma frase sobre o que fizeste e o resultado alcançado.</p></div><span class="yr">2026</span></div></a>
+      <a class="work" href="https://www.youtube.com/watch?v=dTXdsZw9fbQ&t=206s" data-cat="video" data-yt="dTXdsZw9fbQ" data-start="206" target="_blank" rel="noopener"><div class="media g1"><img src="https://i.ytimg.com/vi/dTXdsZw9fbQ/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/dTXdsZw9fbQ/hqdefault.jpg'"><span>Vídeo</span><i class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></i></div><div class="info"><div><h3>Título do vídeo</h3><p>Clica para ver o vídeo aqui mesmo, sem sair do site.</p></div><span class="yr">YouTube</span></div></a>
       <a class="work" href="#" data-cat="design"><div class="media g2"><span>Design</span></div><div class="info"><div><h3>Nome do projeto</h3><p>Uma frase sobre o que fizeste e o resultado alcançado.</p></div><span class="yr">2026</span></div></a>
       <a class="work" href="#" data-cat="musica"><div class="media g3"><span>Música</span></div><div class="info"><div><h3>Nome da faixa</h3><p>O estilo, a história por trás e onde ouvir.</p></div><span class="yr">2026</span></div></a>
       <a class="work" href="#" data-cat="codigo"><div class="media g4"><span>Código</span></div><div class="info"><div><h3>Nome do projeto</h3><p>Uma frase sobre o que construíste e as tecnologias usadas.</p></div><span class="yr">2025</span></div></a>
@@ -259,6 +272,11 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
   <span>© <span id="ano">2026</span> Michael Yambi. Todos os direitos reservados.</span>
   <a href="#topo">Voltar</a>
 </footer>
+
+<dialog class="player" id="player" aria-label="Reprodutor de vídeo">
+  <button class="fechar" id="fechar" type="button">Fechar</button>
+  <div class="frame" id="frame"></div>
+</dialog>
 
 <script>
   document.getElementById('ano').textContent = new Date().getFullYear();
@@ -299,6 +317,19 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
   window.addEventListener('pointerup', () => { down = false; setTimeout(() => slider.classList.remove('drag'), 0); });
   slider.addEventListener('click', e => { if (mexeu) { e.preventDefault(); mexeu = false; } }, true);
   slider.addEventListener('dragstart', e => e.preventDefault());
+
+  // Reprodutor de vídeo (YouTube)
+  const dlg = document.getElementById('player'), quadro = document.getElementById('frame');
+  document.querySelectorAll('.work[data-yt]').forEach(a => a.addEventListener('click', e => {
+    if (e.defaultPrevented) return;            // ignora o fim de um arrastar
+    e.preventDefault();
+    quadro.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + a.dataset.yt + '?start=' + (a.dataset.start || 0) +
+      '&autoplay=1&rel=0&modestbranding=1" title="Vídeo do YouTube" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+    dlg.showModal();
+  }));
+  document.getElementById('fechar').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', () => { quadro.innerHTML = ''; });
 
   // Filtro de trabalhos
   const botoes = document.querySelectorAll('.filters button');
