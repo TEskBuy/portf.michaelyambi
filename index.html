@@ -123,12 +123,6 @@ section{padding:clamp(88px,12vw,160px) var(--pad)}
 .play svg{width:26px;height:26px;fill:var(--bone);margin-left:4px;transition:.3s}
 .work[data-yt]:hover .play{background:var(--brass);border-color:var(--brass);transform:scale(1.08)}
 .work[data-yt]:hover .play svg{fill:var(--ink)}
-dialog.player{border:0;background:transparent;color:var(--bone);padding:0;width:min(1100px,92vw);max-width:none;margin:auto;overflow:visible}
-dialog.player::backdrop{background:rgba(3,16,21,.88);backdrop-filter:blur(8px)}
-.player .frame{aspect-ratio:16/9;background:#000;border-radius:6px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 120px rgba(0,0,0,.6)}
-.player iframe{width:100%;height:100%;border:0;display:block}
-.player .fechar{position:absolute;right:0;top:-54px;background:none;border:1px solid var(--line);color:var(--bone);border-radius:999px;padding:8px 20px;font:inherit;cursor:pointer;transition:.25s}
-.player .fechar:hover{background:var(--bone);color:var(--ink)}
 .g1{--gd:linear-gradient(135deg,#1B7A8C,#0B3340 55%,#D9803F)}
 .g2{--gd:linear-gradient(150deg,#0F4A5A,#072630 55%,#C4562F)}
 .g3{--gd:linear-gradient(120deg,#176D80,#0A2E3A 60%,#E8A064)}
@@ -170,6 +164,11 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
 .media.fit::after{content:"";position:absolute;inset:-24px;background:var(--bg) center/cover no-repeat;filter:blur(26px) brightness(.45) saturate(1.1)}
 .media.fit img{z-index:1;object-fit:contain;padding:clamp(10px,2vw,22px)}
 .media.fit span{z-index:2}
+.media.fit{--p:clamp(10px,2vw,22px)}
+.media.fit img{padding:var(--p)}
+.media.playing span{display:none}
+.media.playing iframe{position:absolute;z-index:3;left:var(--p);top:50%;width:calc(100% - 2*var(--p));aspect-ratio:16/9;height:auto;transform:translateY(-50%);border:0;border-radius:4px;background:#000}
+.work[data-yt] .media.fit{cursor:pointer}
 </style>
 </head>
 <body>
@@ -243,8 +242,8 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
          põe-a na pasta "imagens" e acrescenta ao .media:
          style="--g:url(imagens/o-teu-ficheiro.jpg) center/cover" -->
     <div class="slider" id="grid" tabindex="0" role="region" aria-label="Trabalhos. Desliza na horizontal.">
-      <a class="work" href="https://www.youtube.com/watch?v=dTXdsZw9fbQ&t=206s" data-cat="youtube" data-yt="dTXdsZw9fbQ" data-start="206" target="_blank" rel="noopener"><div class="media g1"><img src="https://i.ytimg.com/vi/dTXdsZw9fbQ/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/dTXdsZw9fbQ/hqdefault.jpg'"><span>YouTube</span><i class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></i></div><div class="info"><div><h3>Título do vídeo</h3><p>Clica para ver o vídeo aqui mesmo, sem sair do site.</p></div><span class="yr">YouTube</span></div></a>
-      <a class="work" href="https://www.youtube.com/watch?v=U9WFMxLsC8g&t=9s" data-cat="youtube" data-yt="U9WFMxLsC8g" data-start="9" target="_blank" rel="noopener"><div class="media g6"><img src="https://i.ytimg.com/vi/U9WFMxLsC8g/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/U9WFMxLsC8g/hqdefault.jpg'"><span>YouTube</span><i class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></i></div><div class="info"><div><h3>Título do vídeo</h3><p>Clica para ver o vídeo aqui mesmo, sem sair do site.</p></div><span class="yr">YouTube</span></div></a>
+      <a class="work" href="https://www.youtube.com/watch?v=dTXdsZw9fbQ&t=206s" data-cat="youtube" data-yt="dTXdsZw9fbQ" data-start="206" rel="noopener"><div class="media fit" style="--bg:url(https://i.ytimg.com/vi/dTXdsZw9fbQ/hqdefault.jpg)"><img src="https://i.ytimg.com/vi/dTXdsZw9fbQ/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/dTXdsZw9fbQ/hqdefault.jpg'"><span>YouTube</span><i class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></i></div><div class="info"><div><h3>Título do vídeo</h3><p>Clica para ver o vídeo aqui mesmo, sem sair do site.</p></div><span class="yr">YouTube</span></div></a>
+      <a class="work" href="https://www.youtube.com/watch?v=U9WFMxLsC8g&t=9s" data-cat="youtube" data-yt="U9WFMxLsC8g" data-start="9" rel="noopener"><div class="media fit" style="--bg:url(https://i.ytimg.com/vi/U9WFMxLsC8g/hqdefault.jpg)"><img src="https://i.ytimg.com/vi/U9WFMxLsC8g/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/U9WFMxLsC8g/hqdefault.jpg'"><span>YouTube</span><i class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></i></div><div class="info"><div><h3>Título do vídeo</h3><p>Clica para ver o vídeo aqui mesmo, sem sair do site.</p></div><span class="yr">YouTube</span></div></a>
       <a class="work" href="imagens/logotipos.webp" data-cat="design" target="_blank" rel="noopener"><div class="media fit" style="--bg:url(imagens/logotipos.webp)"><img src="imagens/logotipos.webp" alt="Logotipo da TEskBuy: carrinho de compras com as letras T e B, em branco sobre fundo verde-azulado" loading="lazy"><span>Design</span></div><div class="info"><div><h3>Criação de logotipos</h3><p>Logotipo da TEskBuy, que junta um carrinho de compras às iniciais T e B.</p></div><span class="yr">2026</span></div></a>
       <a class="work" href="imagens/artes-redes-sociais.webp" data-cat="design" target="_blank" rel="noopener"><div class="media fit" style="--bg:url(imagens/artes-redes-sociais.webp)"><img src="imagens/artes-redes-sociais.webp" alt="Arte para redes sociais sobre gestão de redes sociais, com portátil e telemóvel" loading="lazy"><span>Design</span></div><div class="info"><div><h3>Criação de artes para redes sociais</h3><p>Arte de divulgação do serviço de gestão de redes sociais.</p></div><span class="yr">2026</span></div></a>
       <a class="work" href="imagens/teskbuy-web.webp" data-cat="dev" target="_blank" rel="noopener"><div class="media fit" style="--bg:url(imagens/teskbuy-web.webp)"><img src="imagens/teskbuy-web.webp" alt="Ecrã da versão web da TEskBuy com o feed, as histórias e a barra lateral" loading="lazy"><span>Dev</span></div><div class="info"><div><h3>TEskBuy · versão web</h3><p>Rede social e marketplace com feed, histórias, mercado, mensagens e pedidos.</p></div><span class="yr">2026</span></div></a>
@@ -281,11 +280,6 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
   <span>© <span id="ano">2026</span> Michael Yambi. Todos os direitos reservados.</span>
   <a href="#topo">Voltar</a>
 </footer>
-
-<dialog class="player" id="player" aria-label="Reprodutor de vídeo">
-  <button class="fechar" id="fechar" type="button">Fechar</button>
-  <div class="frame" id="frame"></div>
-</dialog>
 
 <script>
   document.getElementById('ano').textContent = new Date().getFullYear();
@@ -327,23 +321,31 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
   slider.addEventListener('click', e => { if (mexeu) { e.preventDefault(); mexeu = false; } }, true);
   slider.addEventListener('dragstart', e => e.preventDefault());
 
-  // Reprodutor de vídeo (YouTube)
-  const dlg = document.getElementById('player'), quadro = document.getElementById('frame');
+  // Reprodutor de vídeo (YouTube) dentro do próprio quadrado
+  let ativo = null;
+  function parar() {
+    if (!ativo) return;
+    ativo.media.innerHTML = ativo.html; ativo.media.classList.remove('playing');
+    ativo.a.setAttribute('href', ativo.href); ativo = null;
+  }
   document.querySelectorAll('.work[data-yt]').forEach(a => a.addEventListener('click', e => {
     if (e.defaultPrevented) return;            // ignora o fim de um arrastar
     e.preventDefault();
-    quadro.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + a.dataset.yt + '?start=' + (a.dataset.start || 0) +
+    if (ativo && ativo.a === a) return;
+    parar();
+    const media = a.querySelector('.media');
+    ativo = { a, media, html: media.innerHTML, href: a.getAttribute('href') };
+    a.removeAttribute('href');                 // depois de iniciar, cliques no vídeo não abrem outra página
+    media.classList.add('playing');
+    media.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + a.dataset.yt + '?start=' + (a.dataset.start || 0) +
       '&autoplay=1&rel=0&modestbranding=1" title="Vídeo do YouTube" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
-    dlg.showModal();
   }));
-  document.getElementById('fechar').addEventListener('click', () => dlg.close());
-  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
-  dlg.addEventListener('close', () => { quadro.innerHTML = ''; });
 
   // Filtro de trabalhos
   const botoes = document.querySelectorAll('.filters button');
   const itens = document.querySelectorAll('#grid .work');
   botoes.forEach(b => b.addEventListener('click', () => {
+    parar();
     botoes.forEach(x => x.setAttribute('aria-pressed', x === b));
     itens.forEach(i => { i.hidden = b.dataset.f !== 'todos' && i.dataset.cat !== b.dataset.f; });
     slider.scrollTo({left:0}); atualizar();
